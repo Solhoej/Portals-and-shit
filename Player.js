@@ -2,6 +2,7 @@ class Player {
     constructor(x = 200, y = 380) {
       this.playerPosition = createVector(x, y);
       this.velocityY = 0;
+      this.velocityX = 4;
       
       this.jumpStrength = 10;
       this.isJumping = false;
@@ -12,6 +13,8 @@ class Player {
       
       this.movingLeft = false;
       this.movingRight = false;
+
+      this.jumpCount = 0;
     }
   
     show() {
@@ -22,10 +25,11 @@ class Player {
     }
   
     jump() {
-      if (!this.isJumping) {
+      if (!this.isJumping && this.jumpCount < 1) {
         this.velocityY = -this.jumpStrength;
         this.isJumping = true;
         this.onGround = false;
+        this.jumpCount++
         console.log("jumping")
       }
     }
@@ -45,19 +49,20 @@ class Player {
         this.playerPosition.y = this.groundLevel;
         this.isJumping = false;
         this.onGround = false;
+        this.jumpCount = 0;
       }
     }
   
     movement() {
       if (this.movingLeft) {
-        this.playerPosition.x -= 5;
+        this.playerPosition.x = constrain(this.playerPosition.x - this.velocityX, 0, 380)
       }
   
       if (this.movingRight) {
-        this.playerPosition.x += 5;
+        this.playerPosition.x = constrain(this.playerPosition.x + this.velocityX, 0, 380)
       }
   
       this.applyGravity();
-      this.playerPosition.y += this.velocityY;
+      this.playerPosition.y = constrain(this.playerPosition.y + this.velocityY, 0, 380);
     }
   }
